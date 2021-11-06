@@ -1,7 +1,6 @@
 [project]
 name = "django-2fa"
-version = "0.1.0"
-description = ""
+description = "2 Factor authenication application for Django"
 authors = [
     {name = "Paul Bailey", email = "paul@neutron.studio"},
 ]
@@ -9,11 +8,12 @@ dependencies = [
     "django-fernet-encrypted-fields~=0.0",
 ]
 requires-python = ">=3.7"
-dynamic = ["classifiers"]
+dynamic = ["classifiers", "version"]
 license = {text = "MIT"}
+readme = "README.md"
 
 [project.urls]
-homepage = ""
+homepage = "https://github.com/neutron-sync/django-2fa"
 
 [build-system]
 requires = ["pdm-pep517"]
@@ -21,3 +21,5 @@ build-backend = "pdm.pep517.api"
 
 [tool]
 [tool.pdm]
+[tool.pdm.scripts]
+publish = "pdm publish --username pizzapanther"
