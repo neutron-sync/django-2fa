@@ -1,5 +1,6 @@
 [project]
 name = "django-2fa"
+version = {from = "django_2fa/__init__.py"}
 description = "2 Factor authenication application for Django"
 authors = [
     {name = "Paul Bailey", email = "paul@neutron.studio"},
