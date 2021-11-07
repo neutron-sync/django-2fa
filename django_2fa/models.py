@@ -16,7 +16,7 @@ class Device(models.Model):
   secret = EncryptedTextField(blank=True, null=True)
   counter = models.PositiveIntegerField(default=0)
 
-  owner = models.ForeignKey(settings.AUTH_USER_MODEL)
+  owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
   created = models.DateTimeField(auto_now_add=True)
 

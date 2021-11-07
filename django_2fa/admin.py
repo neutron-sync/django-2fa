@@ -7,6 +7,6 @@ from django_2fa.models import Device
 class DeviceAdmin(admin.ModelAdmin):
   list_display = ('name', 'owner', 'created')
   date_hierarchy = 'created'
-  search_fields = ('name', 'owner__username')
+  search_fields = ('name', 'owner__username', 'owner__email', 'owner__first_name', 'owner__last_name')
 
   raw_id_fields = ('owner',)
