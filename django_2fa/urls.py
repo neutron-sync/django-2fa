@@ -8,5 +8,6 @@ app_name = Django2FaConfig.name
 
 urlpatterns = [
   path('test/', mfa_views.test_2fa, name='test'),
+  path('login/verify/<str>/', mfa_views.login_2fa_verify, name='verify'),
   path('login/', mfa_views.login_2fa, name='login'),
 ]

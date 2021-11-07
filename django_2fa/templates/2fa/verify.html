@@ -1,0 +1,22 @@
+{% extends "2fa/base.html" %}{% load i18n %}
+{% block title %}{% translate "2nd Factor Login" %}{% endblock %}
+{% block content %}
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">
+{% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+<div id="content-main">
+  <form action="{{ request.path }}" method="post" id="mfa-form">
+    {% csrf_token %}
+    <div class="form-row">
+      {{ form.mfa_code.errors }}
+      {{ form.mfa_code.label_tag }} {{ form.mfa_code }}
+    </div>
+    <div class="submit-row">
+      <input type="submit" value="{% translate 'Continue' %}">
+    </div>
+  </form>
+</div>
+{% endblock %}
