@@ -6,6 +6,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.shortcuts import resolve_url
 
 import django_2fa.settings as mfa_settings
+from django_2fa.models import Device
 
 
 def request_passes_test(auth_test_func, mfa_test_func, login_url=None, mfa_url=None, redirect_field_name=mfa_settings.MFA_REDIRECT_FIELD):
@@ -39,6 +40,10 @@ def request_passes_test(auth_test_func, mfa_test_func, login_url=None, mfa_url=N
 def is_mfa_authed(request):
   user_id = request.session.get('2fa_verfied')
   if user_id and request.user.id:
+    return True
+
+  devices = Device.objects.filter(owner=request.user).count()
+  if devices == 0:
     return True
 
   return False

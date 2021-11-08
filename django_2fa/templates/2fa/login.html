@@ -1,0 +1,12 @@
+{% extends "2fa/base.html" %}{% load i18n %}
+{% block title %}{% translate "2nd Factor Login" %}{% endblock %}
+{% block content %}
+<div id="content-main">
+  <h2>{% translate "Choose a device to verify your login:" %}</h2>
+  <ul>
+    {% for d in devices %}
+    <li>{{ d.name }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
