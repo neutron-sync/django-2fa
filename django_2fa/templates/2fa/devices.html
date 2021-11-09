@@ -1,0 +1,15 @@
+{% extends "2fa/base.html" %}{% load i18n %}
+{% block title %}{% translate "2nd Factor Device List" %}{% endblock %}
+{% block content %}
+<div id="content-main">
+  <h2>{% translate "2nd Factor Devices" %}</h2>
+  <a href="{% url 'django_2fa:device-add' %}">
+    <button>Add Device</button>
+  </a>
+  <ul>
+    {% for d in devices %}
+    <li>{{ d.name }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "2fa/base.html" %}{% load i18n %}
+{% block title %}{% translate "Add 2nd Factor Device" %}{% endblock %}
+{% block content %}
+<div id="content-main">
+  <h2>{% translate "Add 2nd Factor Device" %}</h2>
+  <form action="{{ request.path }}" method="post" id="add-device-form">
+    {% csrf_token %}
+    <div class="form-row">
+      {{ form.name.errors }}
+      {{ form.name.label_tag }} {{ form.name }}
+    </div>
+    <div class="form-row">
+      {{ form.device_type.errors }}
+      {{ form.device_type.label_tag }} {{ form.device_type }}
+    </div>
+    {{ form.secret }}
+    <div class="submit-row">
+      <input type="submit" value="{% translate 'Add' %}">
+    </div>
+  </form>
+</div>
+{% endblock %}

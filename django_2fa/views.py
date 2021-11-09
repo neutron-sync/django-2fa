@@ -5,8 +5,10 @@ from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
+import pyotp
+
 from django_2fa.decorators import mfa_login_required
-from django_2fa.forms import MFAForm
+from django_2fa.forms import MFAForm, AddDeviceForm
 from django_2fa.models import Device
 import django_2fa.settings as mfa_settings
 
@@ -47,12 +49,22 @@ def login_2fa_verify(request, device=None):
 
 @login_required
 def devices_list(request):
-  pass
+  devices = Device.objects.filter(owner=request.user).order_by('name')
+  return TemplateResponse(request, '2fa/devices.html', {'devices': devices})
 
 
 @login_required
 def device_add(request):
-  pass
+
+  if request.method == 'GET':
+    form = AddDeviceForm(None, initial={'secret': pyotp.random_base32()})
+
+  if request.method == 'POST':
+    form = AddDeviceForm(request.POST)
+    if form.is_valid():
+      return http.HttpResponseRedirect("../")
+
+  return TemplateResponse(request, '2fa/add-device.html', {'form': form})
 
 
 @login_required
