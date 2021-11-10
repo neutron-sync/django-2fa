@@ -43,7 +43,16 @@ class Device(models.Model):
         hotp = pyotp.HOTP(self.secret)
         return hotp.verify(code, self.counter)
 
+    elif self.device_type == 'app':
+      totp = pyotp.TOTP(self.secret)
+      return totp.verify(code)
+
     return False
+
+  @property
+  def provision_url(self):
+    totp = pyotp.totp.TOTP(self.secret)
+    return totp.provisioning_uri(name=f"User-{self.owner.id}", issuer_name=mfa_settings.MFA_ISSUER_NAME)
 
   def send_code(self):
     self.counter += 1

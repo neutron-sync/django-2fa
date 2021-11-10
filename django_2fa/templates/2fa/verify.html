@@ -1,4 +1,4 @@
-{% extends "2fa/base.html" %}{% load i18n %}
+{% extends "2fa/base.html" %}{% load i18n static %}
 {% block title %}{% translate "2nd Factor Login" %}{% endblock %}
 {% block content %}
 {% if complete_setup %}
@@ -16,12 +16,30 @@
   <form action="{{ request.path }}" method="post" id="mfa-form">
     {% csrf_token %}
     <input type="hidden" name="{{ next_field }}" value="{{ next }}">
+    {% if form.non_field_errors %}
+    <div class="form-row">
+      {{ form.non_field_errors }}
+    </div>
+    {% endif %}
     <p>
       {% if device.device_type == 'email' %}
       {% translate 'Check your e-mail for your authorization code.' %}
+      {% elif device.device_type == 'app' %}
+      {% translate 'Enter code from your authenicator application.' %}
+      {% else %}
+      {% translate 'Use your hardware token to complete sign in.' %}
       {% endif %}
     </p>
     <div class="form-row">
+      {% if complete_setup and device.device_type == 'app' %}
+      <p>
+        {% translate 'Scan QR below in your authenicator app, then enter a code to verify your device.' %}
+        <br>
+        <canvas id="qr"></canvas>
+        <br><br><strong>{% translate 'Provision URL:' %}</strong><br>
+        <pre>{{ device.provision_url }}</pre>
+      </p>
+      {% endif %}
       {{ form.mfa_code.errors }}
       {{ form.mfa_code.label_tag }} {{ form.mfa_code }}
     </div>
@@ -30,4 +48,18 @@
     </div>
   </form>
 </div>
+{% endblock %}
+{% block script %}
+{% if complete_setup and device.device_type == 'app' %}
+<script src="{% static 'qrious.min.js' %}"></script>
+<script>
+  (function() {
+    var qr = new QRious({
+      element: document.getElementById('qr'),
+      value: '{{ device.provision_url }}',
+      size: 200
+    });
+  })();
+</script>
+{% endif %}
 {% endblock %}
