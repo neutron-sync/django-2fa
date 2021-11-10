@@ -3,8 +3,19 @@
 {% block content %}
 <div id="content-main">
   <h2>{% translate "Add 2nd Factor Device" %}</h2>
+  {% if form.errors and not form.non_field_errors %}
+  <p class="errornote">
+  {% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+  </p>
+  {% endif %}
   <form action="{{ request.path }}" method="post" id="add-device-form">
     {% csrf_token %}
+    <input type="hidden" name="{{ next_field }}" value="{{ next }}">
+    {% if form.non_field_errors %}
+    <div class="form-row">
+      {{ form.non_field_errors }}
+    </div>
+    {% endif %}
     <div class="form-row">
       {{ form.name.errors }}
       {{ form.name.label_tag }} {{ form.name }}
@@ -13,9 +24,9 @@
       {{ form.device_type.errors }}
       {{ form.device_type.label_tag }} {{ form.device_type }}
     </div>
-    {{ form.secret }}
+    {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
     <div class="submit-row">
-      <input type="submit" value="{% translate 'Add' %}">
+      <input type="submit" value="{% translate 'Continue' %}">
     </div>
   </form>
 </div>

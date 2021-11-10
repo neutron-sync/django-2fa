@@ -42,7 +42,7 @@ def is_mfa_authed(request):
   if user_id and request.user.id:
     return True
 
-  devices = Device.objects.filter(owner=request.user).count()
+  devices = Device.objects.filter(owner=request.user, setup_complete=True).count()
   if devices == 0:
     return True
 

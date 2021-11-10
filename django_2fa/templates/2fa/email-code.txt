@@ -1,0 +1,3 @@
+{% load i18n %}{% translate 'Temporary Authorization Code' %}
+
+{% translate 'Code:' %} {{ code }}
