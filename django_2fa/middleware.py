@@ -10,7 +10,10 @@ class MFAProctectMiddleware:
   def __call__(self, request):
     needs_mfa = False
 
-    if mfa_settings.MFA_PROTECT_PATH_STARTSWITH and request.path.startswith(mfa_settings.MFA_PROTECT_PATH_STARTSWITH):
+    if mfa_settings.MFA_PROTECT_ALL_AUTHED:
+      needs_mfa = True
+
+    elif mfa_settings.MFA_PROTECT_PATH_STARTSWITH and request.path.startswith(mfa_settings.MFA_PROTECT_PATH_STARTSWITH):
       needs_mfa = True
 
     elif mfa_settings.MFA_PROTECT_PATH_EXACT and request.path in mfa_settings.MFA_PROTECT_PATH_EXACT:
