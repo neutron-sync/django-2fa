@@ -11,3 +11,5 @@ class DeviceAdmin(admin.ModelAdmin):
   search_fields = ('name', 'owner__username', 'owner__email', 'owner__first_name', 'owner__last_name')
 
   raw_id_fields = ('owner',)
+
+  fields = ('name', 'device_type', 'counter', 'counter_expire', 'setup_complete', 'owner')

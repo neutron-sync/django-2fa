@@ -1,5 +1,6 @@
 from django import http
 
+from django_2fa.models import Device
 import django_2fa.settings as mfa_settings
 
 
@@ -22,6 +23,10 @@ class MFAProctectMiddleware:
     if needs_mfa and request.user.is_authenticated:
       user_id = request.session.get('2fa_verfied')
       if user_id and request.user.id:
+        return self.get_response(request)
+
+      devices = Device.objects.filter(owner=request.user, setup_complete=True)
+      if devices.count() == 0:
         return self.get_response(request)
 
       q = http.QueryDict(mutable=True)
