@@ -5,7 +5,7 @@
   <h2>{% translate "Choose a device to verify your login:" %}</h2>
   <ul>
     {% for d in devices %}
-    <li>{{ d.name }}</li>
+    <li><a href="{% url 'django_2fa:verify' d.id %}?{{ next_field }}={{ next|urlencode }}">{{ d.name }}</a></li>
     {% endfor %}
   </ul>
 </div>

@@ -25,7 +25,7 @@
       {% if device.device_type == 'email' %}
       {% translate 'Check your e-mail for your authorization code.' %}
       {% elif device.device_type == 'app' %}
-      {% translate 'Enter code from your authenicator application.' %}
+      {% if not complete_setup %}{% translate 'Enter code from your authenicator application.' %}{% endif %}
       {% else %}
       {% translate 'Use your hardware token to complete sign in.' %}
       {% endif %}

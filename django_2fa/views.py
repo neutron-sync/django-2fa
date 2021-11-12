@@ -20,7 +20,7 @@ def test_2fa(request):
 
 @login_required
 def login_2fa(request):
-  devices = Device.objects.filter(owner=request.user).order_by('name')
+  devices = Device.objects.filter(owner=request.user, setup_complete=True).order_by('name')
   goto = request.GET.get(mfa_settings.MFA_REDIRECT_FIELD, settings.LOGIN_REDIRECT_URL)
 
   if devices.count() == 0:
@@ -33,7 +33,8 @@ def login_2fa(request):
     goto = reverse('django_2fa:verify', args=(str(devices[0].id),)) + '?' + q.urlencode()
     return http.HttpResponseRedirect(goto)
 
-  return TemplateResponse(request, '2fa/login.html', {'devices': devices, 'next': goto})
+  context = {'devices': devices, 'next_field': mfa_settings.MFA_REDIRECT_FIELD, 'next': goto}
+  return TemplateResponse(request, '2fa/login.html', context)
 
 
 @login_required
