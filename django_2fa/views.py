@@ -112,4 +112,7 @@ def device_complete(request, device=None):
 
 @mfa_login_required
 def device_remove(request, device=None):
-  pass
+  device = get_object_or_404(Device, id=device, owner=request.user)
+  device.delete()
+  goto = reverse('django_2fa:devices')
+  return http.HttpResponseRedirect(goto)

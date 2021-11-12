@@ -8,7 +8,11 @@
   </a>
   <ul>
     {% for d in devices %}
-    <li>{{ d.name }}</li>
+    <li>
+      {{ d.name }} -
+      Added: {{ d.created|date:"D, d M Y" }} -
+      [ <a href="{% url 'django_2fa:device-remove' d.id %}" onclick="return confirm('Are sure you wish to remove this device?')">Remove</a> ]
+    </li>
     {% endfor %}
   </ul>
 </div>
