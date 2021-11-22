@@ -109,6 +109,9 @@ def device_complete(request, device=None):
       return http.HttpResponseRedirect(goto)
 
   context = {'device': device, 'complete_setup': True, 'form': form, 'next': goto, 'next_field': mfa_settings.MFA_REDIRECT_FIELD}
+  if device.device_type == 'hkey':
+    return TemplateResponse(request, '2fa/complete-fido.html', context)
+
   return TemplateResponse(request, '2fa/verify.html', context)
 
 @mfa_login_required

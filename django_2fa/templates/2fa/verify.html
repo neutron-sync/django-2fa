@@ -51,7 +51,7 @@
 {% endblock %}
 {% block script %}
 {% if complete_setup and device.device_type == 'app' %}
-<script src="{% static 'qrious.min.js' %}"></script>
+<script src="{% static '2fa/qrious.min.js' %}"></script>
 <script>
   (function() {
     var qr = new QRious({
