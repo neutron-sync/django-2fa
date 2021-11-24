@@ -12,12 +12,12 @@ MFA_PROTECT_ALL_AUTHED = getattr(settings, 'MFA_PROTECT_ALL_AUTHED', False)
 MFA_PROTECT_PATH_STARTSWITH = getattr(settings, 'MFA_PROTECT_PATH_STARTSWITH', None)
 MFA_PROTECT_PATH_EXACT = getattr(settings, 'MFA_PROTECT_PATH_EXACT', None)
 
-MFA_FIDO_KEY_ID = getattr(settings, 'MFA_FIDO_KEY_ID', None)
-if not MFA_FIDO_KEY_ID:
-  if settings.ALLOWED_HOSTS:
-    MFA_FIDO_KEY_ID = settings.ALLOWED_HOSTS[0]
+MFA_ICON = getattr(settings, 'MFA_ICON', "https://github.com/neutron-sync/django-2fa/raw/main/django_2fa/static/2fa/2fa-icon.png")
 
-  else:
-    MFA_FIDO_KEY_ID = "localhost"
+if settings.ALLOWED_HOSTS:
+  HOST = settings.ALLOWED_HOSTS[0]
 
-MFA_FIDO_KEY_NAME = getattr(settings, 'MFA_FIDO_KEY_NAME', f"{MFA_FIDO_KEY_ID} 2FA Server")
+else:
+  HOST = "localhost"
+
+MFA_FIDO_KEY_NAME = getattr(settings, 'MFA_FIDO_KEY_NAME', f"{HOST} 2FA")

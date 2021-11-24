@@ -19,11 +19,18 @@ function start_reg() {
       return navigator.credentials.create(options);
     })
     .then((attestation) => {
-      console.log(attestation);
+      var data = CBOR.encode({
+        "attestationObject": new Uint8Array(attestation.response.attestationObject),
+        "clientDataJSON": new Uint8Array(attestation.response.clientDataJSON)
+      });
+      return axios.post("{% url 'django_2fa:fido-reg-complete' %}", data, {});
+    })
+    .then((response) => {
+      location.href = "{{ next }}";
     })
     .catch((e) => {
       console.error(e);
-      alert('{% translate "Error starting hardware key registration" %}');
+      alert('{% translate "Error in hardware key registration" %}');
     });
 }
 
