@@ -10,9 +10,9 @@
     {% for d in devices %}
     <li>
       {% if d.setup_complete %}
-      {{ d.name }} -
+      {{ d.get_device_type_display }}: {{ d.name }} -
       {% else %}
-      <a href="{% url 'django_2fa:device-complete' d.id %}">Complete Setup: {{ d.name }}</a> -
+      <a href="{% url 'django_2fa:device-complete' d.id %}">Complete Setup: {{ d.get_device_type_display }} - {{ d.name }}</a> -
       {% endif %}
       Added: {{ d.created|date:"D, d M Y" }} -
       [ <a href="{% url 'django_2fa:device-remove' d.id %}" onclick="return confirm('Are sure you wish to remove this device?')">Remove</a> ]

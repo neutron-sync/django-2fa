@@ -1,3 +1,5 @@
+import time
+
 from django import http
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -15,6 +17,11 @@ import django_2fa.settings as mfa_settings
 
 @mfa_login_required
 def test_2fa(request):
+  reset = request.GET.get('reset')
+  if reset:
+    del request.session['2fa_verfied']
+    return http.HttpResponseRedirect(f'./?ts={time.time()}')
+
   return http.HttpResponse('2FA Successful', content_type="text/plain")
 
 
@@ -55,6 +62,9 @@ def login_2fa_verify(request, device=None):
       return http.HttpResponseRedirect(goto)
 
   context = {'form': form, 'device': device, 'next': goto, 'next_field': mfa_settings.MFA_REDIRECT_FIELD}
+  if device.device_type == 'hkey':
+    return TemplateResponse(request, '2fa/verify-fido.html', context)
+
   return TemplateResponse(request, '2fa/verify.html', context)
 
 

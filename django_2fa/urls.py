@@ -16,8 +16,8 @@ urlpatterns = [
   path('devices/<str:device>/remove/', mfa_views.device_remove, name='device-remove'),
   path('devices/<str:device>/complete/', mfa_views.device_complete, name='device-complete'),
 
-  path('fido/reg-begin/', mfa_api_views.register_begin, name='fido-reg-begin'),
-  path('fido/reg-complete/', mfa_api_views.register_complete, name='fido-reg-complete'),
-  path('fido/auth-begin/', mfa_api_views.authenticate_begin, name='fido-auth-begin'),
-  path('fido/auth-complete/', mfa_api_views.authenticate_complete, name='fido-auth-complete'),
+  path('fido/<str:device>/reg-begin/', mfa_api_views.register_begin, name='fido-reg-begin'),
+  path('fido/<str:device>/reg-complete/', mfa_api_views.register_complete, name='fido-reg-complete'),
+  path('fido/<str:device>/auth-begin/', mfa_api_views.authenticate_begin, name='fido-auth-begin'),
+  path('fido/<str:device>/auth-complete/', mfa_api_views.authenticate_complete, name='fido-auth-complete'),
 ]
