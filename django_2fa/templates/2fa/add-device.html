@@ -1,14 +1,16 @@
 {% extends "2fa/base.html" %}{% load i18n %}
 {% block title %}{% translate "Add 2nd Factor Device" %}{% endblock %}
+{% block nav-title %}
+<h1>{% translate "Add 2nd Factor Device" %}</h1>
+{% endblock %}
 {% block content %}
-<div id="content-main">
-  <h2>{% translate "Add 2nd Factor Device" %}</h2>
+<div class="row">
   {% if form.errors and not form.non_field_errors %}
   <p class="errornote">
   {% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
   </p>
   {% endif %}
-  <form action="{{ request.path }}" method="post" id="add-device-form">
+  <form action="{{ request.path }}" method="post" id="add-device-form" class="col s12">
     {% csrf_token %}
     <input type="hidden" name="{{ next_field }}" value="{{ next }}">
     {% if form.non_field_errors %}
@@ -16,18 +18,37 @@
       {{ form.non_field_errors }}
     </div>
     {% endif %}
-    <div class="form-row">
-      {{ form.name.errors }}
-      {{ form.name.label_tag }} {{ form.name }}
+    <div class="row">
+      <div class="input-field col s12 l6">
+        {{ form.name.errors }}
+        {{ form.name }}
+        {{ form.name.label_tag }}
+      </div>
     </div>
-    <div class="form-row">
-      {{ form.device_type.errors }}
-      {{ form.device_type.label_tag }} {{ form.device_type }}
+    <div class="row">
+      <div class="input-field col s12 l6">
+        {{ form.device_type.errors }}
+        {{ form.device_type }}
+        {{ form.device_type.label_tag }}
+      </div>
     </div>
     {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
-    <div class="submit-row">
-      <input type="submit" value="{% translate 'Continue' %}">
+    <div class="row">
+      <div class="input-field col s12 l6">
+        <button class="btn waves-effect waves-light" type="submit">
+          {% translate 'Continue' %}
+        </button>
+      </div>
     </div>
   </form>
 </div>
+{% endblock %}
+{% block script %}
+{{ block.super }}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems);
+  });
+</script>
 {% endblock %}
