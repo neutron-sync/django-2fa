@@ -1,19 +1,20 @@
 {% extends "2fa/base.html" %}{% load i18n static %}
 {% block title %}{% translate "2nd Factor Login" %}{% endblock %}
-{% block content %}
+{% block nav-title %}
 {% if complete_setup %}
 <h1>{% translate 'Verify your authorization device.' %}</h1>
 {% else %}
 <h1>{% translate 'Enter your authorization code to continue.' %}</h1>
 {% endif %}
+{% endblock %}
+{% block content %}
 {% if form.errors and not form.non_field_errors %}
 <p class="errornote">
 {% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
 </p>
 {% endif %}
-
-<div id="content-main">
-  <form action="{{ request.path }}" method="post" id="mfa-form">
+<div class="row">
+  <form action="{{ request.path }}" method="post" id="mfa-form" class="col s12">
     {% csrf_token %}
     <input type="hidden" name="{{ next_field }}" value="{{ next }}">
     {% if form.non_field_errors %}
@@ -30,21 +31,26 @@
       {% translate 'Use your hardware token to complete sign in.' %}
       {% endif %}
     </p>
-    <div class="form-row">
-      {% if complete_setup and device.device_type == 'app' %}
-      <p>
-        {% translate 'Scan QR below in your authenicator app, then enter a code to verify your device.' %}
-        <br>
-        <canvas id="qr"></canvas>
-        <br><br><strong>{% translate 'Provision URL:' %}</strong><br>
-        <pre>{{ device.provision_url }}</pre>
-      </p>
-      {% endif %}
-      {{ form.mfa_code.errors }}
-      {{ form.mfa_code.label_tag }} {{ form.mfa_code }}
+    <div class="row">
+      <div class="input-field col s12 l6">
+        {% if complete_setup and device.device_type == 'app' %}
+        <p>
+          {% translate 'Scan QR below in your authenicator app, then enter a code to verify your device.' %}
+          <br>
+          <canvas id="qr"></canvas>
+          <br><br><strong>{% translate 'Provision URL:' %}</strong><br>
+          <pre>{{ device.provision_url }}</pre>
+        </p>
+        {% endif %}
+        {{ form.mfa_code.errors }}
+        {{ form.mfa_code }}
+        {{ form.mfa_code.label_tag }}
+      </div>
     </div>
-    <div class="submit-row">
-      <input type="submit" value="{% translate 'Continue' %}">
+    <div class="row">
+      <div class="input-field col s12 l6">
+        <button class="btn waves-effect waves-light" type="submit">{% translate 'Continue' %}</button>
+      </div>
     </div>
   </form>
 </div>
