@@ -1,21 +1,33 @@
 {% extends "2fa/base.html" %}{% load i18n %}
 {% block title %}{% translate "2nd Factor Device List" %}{% endblock %}
+{% block nav-title %}
+<h1>{% translate "2nd Factor Devices" %}</h1>
+{% endblock %}
 {% block content %}
 <div id="content-main">
-  <h2>{% translate "2nd Factor Devices" %}</h2>
-  <a href="{% url 'django_2fa:device-add' %}">
-    <button>Add Device</button>
+  <a href="{% url 'django_2fa:device-add' %}" class="waves-effect waves-light btn">
+    Add Device
   </a>
-  <ul>
+  <ul class="collection">
     {% for d in devices %}
-    <li>
-      {% if d.setup_complete %}
-      {{ d.get_device_type_display }}: {{ d.name }} -
-      {% else %}
-      <a href="{% url 'django_2fa:device-complete' d.id %}">Complete Setup: {{ d.get_device_type_display }} - {{ d.name }}</a> -
-      {% endif %}
-      Added: {{ d.created|date:"D, d M Y" }} -
-      [ <a href="{% url 'django_2fa:device-remove' d.id %}" onclick="return confirm('Are sure you wish to remove this device?')">Remove</a> ]
+    <li class="collection-item avatar">
+      <i class="material-icons circle">
+        {% if d.device_type == 'email' %}mail
+        {% elif d.device_type == 'app' %}phone_android
+        {% else %}vpn_key{% endif %}
+      </i>
+      <span class="title">
+        <strong>{{ d.name }} - {{ d.get_device_type_display }}</strong>
+      </span>
+      <p>
+        {% if not d.setup_complete %}
+        <a href="{% url 'django_2fa:device-complete' d.id %}">Complete Setup</a><br>
+        {% endif %}
+        Added: {{ d.created|date:"D, dS M Y" }}
+      </p>
+      <a href="{% url 'django_2fa:device-remove' d.id %}" title="remove" class="secondary-content" onclick="return confirm('Are sure you wish to remove this device?')">
+        <i class="material-icons">delete</i>
+      </a>
     </li>
     {% endfor %}
   </ul>

@@ -50,6 +50,7 @@
 </div>
 {% endblock %}
 {% block script %}
+{{ block.super }}
 {% if complete_setup and device.device_type == 'app' %}
 <script src="{% static '2fa/qrious.min.js' %}"></script>
 <script>

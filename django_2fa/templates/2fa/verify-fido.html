@@ -6,6 +6,7 @@
 </div>
 {% endblock %}
 {% block script %}
+{{ block.super }}
 <script src="{% static '2fa/axios.min.js' %}"></script>
 <script src="{% static '2fa/cbor.js' %}"></script>
 <script>
