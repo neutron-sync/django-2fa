@@ -1,0 +1,40 @@
+{% extends "2fa/base.html" %}{% load i18n static %}
+{% block title %}{% translate "2nd Factor Login" %}{% endblock %}
+{% block content %}
+<h1>{% translate 'Use your hardware key to continue.' %}</h1>
+<div id="content-main">
+</div>
+{% endblock %}
+{% block script %}
+<script src="{% static '2fa/axios.min.js' %}"></script>
+<script src="{% static '2fa/cbor.js' %}"></script>
+<script>
+function start_auth() {
+  axios.post("{% url 'django_2fa:fido-auth-begin' device.id %}", {}, {responseType: 'arraybuffer'})
+    .then((response) => {
+      return CBOR.decode(response.data);
+    })
+    .then((options) => {
+      return navigator.credentials.get(options);
+    })
+    .then((assertion) => {
+      var data = CBOR.encode({
+        "credentialId": new Uint8Array(assertion.rawId),
+        "authenticatorData": new Uint8Array(assertion.response.authenticatorData),
+        "clientDataJSON": new Uint8Array(assertion.response.clientDataJSON),
+        "signature": new Uint8Array(assertion.response.signature)
+      });
+      return axios.post("{% url 'django_2fa:fido-auth-complete' device.id %}", data, {});
+    })
+    .then((response) => {
+      location.href = "{{ next }}";
+    })
+    .catch((e) => {
+      console.error(e);
+      alert('{% translate "Error in hardware key authorization" %}');
+    });
+}
+
+start_auth();
+</script>
+{% endblock %}

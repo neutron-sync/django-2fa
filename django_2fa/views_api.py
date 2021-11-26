@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from fido2 import cbor
 from fido2.client import ClientData
-from fido2.ctap2 import AttestationObject, AuthenticatorData
+from fido2.ctap2 import AttestationObject, AuthenticatorData, AttestedCredentialData
 from fido2.server import Fido2Server
 from fido2.webauthn import PublicKeyCredentialRpEntity
 
@@ -67,6 +67,7 @@ def register_complete(request, device=None):
   device.save()
 
   del request.session['fido-state']
+  request.session['2fa_verfied'] = request.user.id
 
   return http.JsonResponse({'status': "OK"})
 
@@ -74,10 +75,38 @@ def register_complete(request, device=None):
 @csrf_exempt
 @login_required
 def authenticate_begin(request, device=None):
-  pass
+  device = get_object_or_404(Device, id=device, owner=request.user, setup_complete=True)
+
+  creds = AttestedCredentialData(base64.b64decode(device.secret))
+
+  data, state = fido_server(request).authenticate_begin([creds])
+  request.session['fido-state'] = state
+
+  return http.HttpResponse(cbor.encode(data), content_type="application/cbor")
 
 
 @csrf_exempt
 @login_required
 def authenticate_complete(request, device=None):
-  pass
+  device = get_object_or_404(Device, id=device, owner=request.user, setup_complete=True)
+
+  data = cbor.decode(request.body)
+  credential_id = data["credentialId"]
+  client_data = ClientData(data["clientDataJSON"])
+  auth_data = AuthenticatorData(data["authenticatorData"])
+  signature = data["signature"]
+  creds = AttestedCredentialData(base64.b64decode(device.secret))
+
+  fido_server(request).authenticate_complete(
+    request.session['fido-state'],
+    [creds],
+    credential_id,
+    client_data,
+    auth_data,
+    signature,
+  )
+
+  del request.session['fido-state']
+  request.session['2fa_verfied'] = request.user.id
+
+  return http.JsonResponse({'status': "OK"})
