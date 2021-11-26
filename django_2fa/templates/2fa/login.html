@@ -1,11 +1,26 @@
 {% extends "2fa/base.html" %}{% load i18n %}
 {% block title %}{% translate "2nd Factor Login" %}{% endblock %}
+{% block nav-title %}
+<h1>{% translate "Choose a device to verify your login:" %}</h1>
+{% endblock %}
 {% block content %}
-<div id="content-main">
-  <h2>{% translate "Choose a device to verify your login:" %}</h2>
-  <ul>
+<div id="row">
+  <ul class="collection">
     {% for d in devices %}
-    <li><a href="{% url 'django_2fa:verify' d.id %}?{{ next_field }}={{ next|urlencode }}">{{ d.name }}</a></li>
+    <li class="collection-item avatar">
+      <a href="{% url 'django_2fa:verify' d.id %}?{{ next_field }}={{ next|urlencode }}">
+        <i class="material-icons circle">
+          {% if d.device_type == 'email' %}mail
+          {% elif d.device_type == 'app' %}phone_android
+          {% else %}vpn_key{% endif %}
+        </i>
+      </a>
+      <span class="title">
+        <strong>
+          <a href="{% url 'django_2fa:verify' d.id %}?{{ next_field }}={{ next|urlencode }}">{{ d.name }}</a>
+        </strong>
+      </span>
+    </li>
     {% endfor %}
   </ul>
 </div>
