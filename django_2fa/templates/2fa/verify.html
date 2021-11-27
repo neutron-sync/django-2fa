@@ -4,7 +4,7 @@
 {% if complete_setup %}
 <h1>{% translate 'Verify your authorization device.' %}</h1>
 {% else %}
-<h1>{% translate 'Enter your authorization code to continue.' %}</h1>
+<h1>{% translate 'Authorization Code Required' %}</h1>
 {% endif %}
 {% endblock %}
 {% block content %}
@@ -22,26 +22,29 @@
       {{ form.non_field_errors }}
     </div>
     {% endif %}
-    <p>
-      {% if device.device_type == 'email' %}
-      {% translate 'Check your e-mail for your authorization code.' %}
-      {% elif device.device_type == 'app' %}
-      {% if not complete_setup %}{% translate 'Enter code from your authenicator application.' %}{% endif %}
-      {% else %}
-      {% translate 'Use your hardware token to complete sign in.' %}
-      {% endif %}
-    </p>
     <div class="row">
-      <div class="input-field col s12 l6">
-        {% if complete_setup and device.device_type == 'app' %}
-        <p>
-          {% translate 'Scan QR below in your authenicator app, then enter a code to verify your device.' %}
-          <br>
-          <canvas id="qr"></canvas>
-          <br><br><strong>{% translate 'Provision URL:' %}</strong><br>
-          <pre>{{ device.provision_url }}</pre>
-        </p>
+      <p>
+        <strong>{% translate 'Authenticator:' %} {{ device.name }}</strong><br>
+        {% if device.device_type == 'email' %}
+        {% translate 'Check your e-mail for your authorization code.' %}
+        {% elif device.device_type == 'app' %}
+        {% if not complete_setup %}{% translate 'Enter code from your authenicator application.' %}{% endif %}
+        {% else %}
+        {% translate 'Use your hardware token to complete sign in.' %}
         {% endif %}
+      </p>
+    </div>
+    <div class="row">
+      {% if complete_setup and device.device_type == 'app' %}
+      <p>
+        {% translate 'Scan QR below in your authenicator app, then enter a code to verify your device.' %}
+        <br>
+        <canvas id="qr"></canvas>
+        <br><br><strong>{% translate 'Provision URL:' %}</strong><br>
+        <pre>{{ device.provision_url }}</pre>
+      </p>
+      {% endif %}
+      <div class="input-field col s12 l6">
         {{ form.mfa_code.errors }}
         {{ form.mfa_code }}
         {{ form.mfa_code.label_tag }}

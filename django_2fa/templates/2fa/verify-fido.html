@@ -1,8 +1,11 @@
 {% extends "2fa/base.html" %}{% load i18n static %}
 {% block title %}{% translate "2nd Factor Login" %}{% endblock %}
+{% block nav-title %}
+<h1>{% translate 'Hardware Key Verification' %}</h1>
+{% endblock %}
 {% block content %}
-<h1>{% translate 'Use your hardware key to continue.' %}</h1>
 <div id="content-main">
+  <h4 class="tc">{% translate 'Use your hardware key to continue.' %}</h4>
 </div>
 {% endblock %}
 {% block script %}

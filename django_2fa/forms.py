@@ -31,8 +31,12 @@ class AddDeviceForm(forms.ModelForm):
 
   def clean_device_type(self):
     data = self.cleaned_data['device_type']
-    if not self.owner.email:
-      raise ValidationError(_("An e-mail must be associated with this account."))
+    if data == 'email':
+      if not self.owner.email:
+        raise ValidationError(_("An e-mail must be associated with this account."))
+
+      if Device.objects.filter(device_type='email', owner=self.owner).count() > 1:
+          raise ValidationError(_("Only one e-mail authenticator is allowed."))
 
     return data
 
