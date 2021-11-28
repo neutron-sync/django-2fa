@@ -68,14 +68,18 @@ def login_2fa_verify(request, device=None):
   return TemplateResponse(request, '2fa/verify.html', context)
 
 
-@mfa_login_required
-def devices_list(request):
+@login_required
+def devices_list(request, response_type="html"):
   devices = Device.objects.filter(owner=request.user).order_by('name')
+  if response_type == 'json':
+    ret = {'devices': [d.to_dict() for d in devices]}
+    return http.JsonResponse(ret)
+
   return TemplateResponse(request, '2fa/devices.html', {'devices': devices})
 
 
 @mfa_login_required
-def device_add(request):
+def device_add(request, response_type="html"):
   form = AddDeviceForm(request.user, request.POST or None)
   goto = request.GET.get(mfa_settings.MFA_REDIRECT_FIELD, reverse('django_2fa:devices'))
 
@@ -88,14 +92,20 @@ def device_add(request):
 
       device = form.save()
       goto = reverse('django_2fa:device-complete', args=(str(device.id),)) + "?" + q.urlencode()
+      if response_type == 'json':
+        return http.JsonResponse(device.to_dict())
+
       return http.HttpResponseRedirect(goto)
+
+    elif response_type == 'json':
+      return http.JsonResponse({'errors': form.errors.as_json()}, status_code=400)
 
   context = {'form': form, 'next': goto, 'next_field': mfa_settings.MFA_REDIRECT_FIELD}
   return TemplateResponse(request, '2fa/add-device.html', context)
 
 
 @mfa_login_required
-def device_complete(request, device=None):
+def device_complete(request, device=None, response_type="html"):
   device = get_object_or_404(Device, id=device, owner=request.user, setup_complete=False)
   goto = request.GET.get(mfa_settings.MFA_REDIRECT_FIELD, reverse('django_2fa:devices'))
 
@@ -116,7 +126,13 @@ def device_complete(request, device=None):
       device.save()
       request.session['2fa_verfied'] = request.user.id
 
+      if response_type == 'json':
+        return http.JsonResponse(device.to_dict())
+
       return http.HttpResponseRedirect(goto)
+
+    elif response_type == 'json':
+      return http.JsonResponse({'errors': form.errors.as_json()}, status_code=400)
 
   context = {'device': device, 'complete_setup': True, 'form': form, 'next': goto, 'next_field': mfa_settings.MFA_REDIRECT_FIELD}
   if device.device_type == 'hkey':
@@ -125,8 +141,12 @@ def device_complete(request, device=None):
   return TemplateResponse(request, '2fa/verify.html', context)
 
 @mfa_login_required
-def device_remove(request, device=None):
+def device_remove(request, device=None, response_type="html"):
   device = get_object_or_404(Device, id=device, owner=request.user)
   device.delete()
   goto = reverse('django_2fa:devices')
+
+  if response_type == 'json':
+    return http.JsonResponse({"status": "deleted"})
+
   return http.HttpResponseRedirect(goto)

@@ -36,6 +36,14 @@ class Device(models.Model):
   def __str__(self):
     return self.name
 
+  def to_dict(self):
+    return {
+      'name': self.name,
+      'device_type': self.device_type,
+      'setup_complete': self.setup_complete,
+      'created': self.created.isoformat(),
+    }
+
   def verify_code(self, code):
     if self.device_type == 'email':
       now = timezone.now()
