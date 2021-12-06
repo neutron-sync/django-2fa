@@ -1,6 +1,5 @@
 [project]
 name = "django-2fa"
-version = {from = "django_2fa/__init__.py"}
 description = "2 Factor authenication application for Django"
 authors = [
     {name = "Paul Bailey", email = "paul@neutron.studio"},
@@ -10,7 +9,7 @@ dependencies = [
     "pyotp~=2.6",
     "fido2~=0.9"]
 requires-python = ">=3.7"
-dynamic = ["classifiers", "version"]
+dynamic = ["version"]
 license = {text = "MIT"}
 readme = "README.md"
 
@@ -23,5 +22,6 @@ build-backend = "pdm.pep517.api"
 
 [tool]
 [tool.pdm]
+version = {from = "django_2fa/__init__.py"}
 [tool.pdm.scripts]
 publish = "pdm publish --username pizzapanther"
