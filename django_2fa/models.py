@@ -38,6 +38,7 @@ class Device(models.Model):
 
   def to_dict(self):
     return {
+      'id': self.id,
       'name': self.name,
       'device_type': self.device_type,
       'setup_complete': self.setup_complete,

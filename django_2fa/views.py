@@ -138,6 +138,9 @@ def device_complete(request, device=None, response_type="html"):
   if device.device_type == 'hkey':
     return TemplateResponse(request, '2fa/complete-fido.html', context)
 
+  if response_type == 'json':
+    return http.JsonResponse({'status': 'Code Sent'})
+
   return TemplateResponse(request, '2fa/verify.html', context)
 
 @mfa_login_required
