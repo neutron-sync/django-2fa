@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 import pyotp
 
@@ -108,6 +109,11 @@ def device_add(request, response_type="html"):
   return TemplateResponse(request, '2fa/add-device.html', context)
 
 
+@csrf_exempt
+def device_add_json(request):
+  return device_add(request, response_type="json")
+
+
 @mfa_login_required
 def device_complete(request, device=None, response_type="html"):
   device = get_object_or_404(Device, id=device, owner=request.user, setup_complete=False)
@@ -142,6 +148,12 @@ def device_complete(request, device=None, response_type="html"):
     return http.JsonResponse({'status': 'Code Sent'})
 
   return TemplateResponse(request, '2fa/verify.html', context)
+
+
+@csrf_exempt
+def device_complete_json(request, device=None):
+  return device_complete(request, device=device, response_type="json")
+
 
 @mfa_login_required
 def device_remove(request, device=None, response_type="html"):

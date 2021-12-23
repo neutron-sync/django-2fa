@@ -15,13 +15,13 @@ urlpatterns = [
   path('devices/json', mfa_views.devices_list, name='devices-json', kwargs={'response_type': 'json'}),
 
   path('devices/add/', mfa_views.device_add, name='device-add'),
-  path('devices/add/json', mfa_views.device_add, name='device-add-json', kwargs={'response_type': 'json'}),
+  path('devices/add/json', mfa_views.device_add_json, name='device-add-json'),
 
   path('devices/<str:device>/remove/', mfa_views.device_remove, name='device-remove'),
   path('devices/<str:device>/remove/json', mfa_views.device_remove, name='device-remove-json', kwargs={'response_type': 'json'}),
 
   path('devices/<str:device>/complete/', mfa_views.device_complete, name='device-complete'),
-  path('devices/<str:device>/complete/json', mfa_views.device_complete, name='device-complete-json', kwargs={'response_type': 'json'}),
+  path('devices/<str:device>/complete/json', mfa_views.device_complete_json, name='device-complete-json'),
 
   path('fido/<str:device>/reg-begin/', mfa_api_views.register_begin, name='fido-reg-begin'),
   path('fido/<str:device>/reg-complete/', mfa_api_views.register_complete, name='fido-reg-complete'),
