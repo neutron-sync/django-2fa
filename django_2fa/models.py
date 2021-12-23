@@ -42,6 +42,7 @@ class Device(models.Model):
       'name': self.name,
       'device_type': self.device_type,
       'setup_complete': self.setup_complete,
+      'setup_url': self.setup_url,
       'created': self.created.isoformat(),
     }
 
@@ -57,6 +58,11 @@ class Device(models.Model):
       return totp.verify(code)
 
     return False
+
+  @property
+  def setup_url(self):
+    if not self.setup_complete and self.device_type == 'app':
+      return self.provision_url
 
   @property
   def provision_url(self):

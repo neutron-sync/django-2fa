@@ -91,6 +91,10 @@ def device_add(request, response_type="html"):
       q.update({mfa_settings.MFA_REDIRECT_FIELD: goto})
 
       device = form.save()
+      if device.device_type in ['email', 'app']:
+        device.secret = pyotp.random_base32()
+        device.save()
+
       goto = reverse('django_2fa:device-complete', args=(str(device.id),)) + "?" + q.urlencode()
       if response_type == 'json':
         return http.JsonResponse(device.to_dict())
@@ -111,10 +115,6 @@ def device_complete(request, device=None, response_type="html"):
 
   form = MFAForm(device, request.POST or None)
   if request.method == 'GET':
-    if device.device_type in ['email', 'app']:
-      device.secret = pyotp.random_base32()
-      device.save()
-
     if device.device_type == 'email':
       device.send_code()
 
