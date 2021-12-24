@@ -14,6 +14,7 @@ urlpatterns = [
 
   path('request/<str:token>/', mfa_views.mfa_request, name='mfa-request'),
   path('request-complete/<str:token>/', mfa_views.mfa_request_complete, name='mfa-request-complete'),
+  path('request-use/<str:token>/', mfa_api_views.request_use, name='mfa-request-use'),
 
   path('devices/', mfa_views.devices_list, name='devices'),
   path('devices/json', mfa_views.devices_list, name='devices-json', kwargs={'response_type': 'json'}),

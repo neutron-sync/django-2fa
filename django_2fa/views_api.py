@@ -12,7 +12,7 @@ from fido2.ctap2 import AttestationObject, AuthenticatorData, AttestedCredential
 from fido2.server import Fido2Server
 from fido2.webauthn import PublicKeyCredentialRpEntity
 
-from django_2fa.models import Device
+from django_2fa.models import Device, MFARequest
 
 import django_2fa.settings as mfa_settings
 
@@ -108,5 +108,21 @@ def authenticate_complete(request, device=None):
 
   del request.session['fido-state']
   request.session['2fa_verfied'] = request.user.id
+
+  return http.JsonResponse({'status': "OK"})
+
+
+@csrf_exempt
+@login_required
+def request_use(request, token):
+  try:
+    mrequest = MFARequest.get_from_token(token, request.user, completed=True)
+
+  except:
+    raise http.Http404
+
+  request.session['2fa_verfied'] = request.user.id
+  mrequest.used = True
+  mrequest.save()
 
   return http.JsonResponse({'status': "OK"})

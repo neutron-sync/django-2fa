@@ -17,8 +17,8 @@ class DeviceAdmin(admin.ModelAdmin):
 
 @admin.register(MFARequest)
 class MFARequestAdmin(admin.ModelAdmin):
-  list_display = ('slug', 'completed', 'owner', 'created')
-  list_filter = ('completed',)
+  list_display = ('slug', 'completed', 'used', 'owner', 'created')
+  list_filter = ('completed', 'used')
   date_hierarchy = 'created'
   search_fields = ('slug',)
   raw_id_fields = ('owner',)

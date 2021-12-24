@@ -43,7 +43,7 @@ def login_2fa(request):
     return http.HttpResponseRedirect(goto)
 
   context = {'devices': devices, 'next_field': mfa_settings.MFA_REDIRECT_FIELD, 'next': goto}
-  return TemplateResponse(request, '2fa/login.html', context)
+  return TemplateResponse(request, '2fa/login.html', context, status=207)
 
 
 @login_required
@@ -65,9 +65,9 @@ def login_2fa_verify(request, device=None):
 
   context = {'form': form, 'device': device, 'next': goto, 'next_field': mfa_settings.MFA_REDIRECT_FIELD}
   if device.device_type == 'hkey':
-    return TemplateResponse(request, '2fa/verify-fido.html', context)
+    return TemplateResponse(request, '2fa/verify-fido.html', context, status=207)
 
-  return TemplateResponse(request, '2fa/verify.html', context)
+  return TemplateResponse(request, '2fa/verify.html', context, status=207)
 
 
 @login_required

@@ -22,4 +22,4 @@ else:
 
 MFA_FIDO_KEY_NAME = getattr(settings, 'MFA_FIDO_KEY_NAME', f"{HOST} 2FA")
 
-MFA_TOKEN_EXPIRE = getattr(settings, 'MFA_TOKEN_EXPIRE', 5)
+MFA_TOKEN_EXPIRE = getattr(settings, 'MFA_TOKEN_EXPIRE', 15)

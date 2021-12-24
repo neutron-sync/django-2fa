@@ -97,6 +97,7 @@ class MFARequest(models.Model):
   slug = models.SlugField(max_length=75)
   owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   completed = models.BooleanField(default=False)
+  used = models.BooleanField(default=False)
 
   created = models.DateTimeField(auto_now_add=True)
 
@@ -134,9 +135,15 @@ class MFARequest(models.Model):
         return request
 
   @classmethod
-  def get_from_token(cls, token, owner=None):
+  def get_from_token(cls, token, owner=None, completed=False):
     data = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-    if owner:
-      return cls.objects.get(slug=data['slug'], completed=False, owner=owner)
 
-    return cls.objects.get(slug=data['slug'], completed=False)
+    kwargs = {
+      'slug': data['slug'],
+      'completed': completed,
+      'used': False,
+    }
+    if owner:
+      kwargs['owner'] = owner
+
+    return cls.objects.get(**kwargs)
