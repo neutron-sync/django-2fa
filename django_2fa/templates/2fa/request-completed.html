@@ -1,0 +1,11 @@
+{% extends "2fa/base.html" %}{% load i18n %}
+{% block title %}{% translate "2nd Factor Verified" %}{% endblock %}
+{% block nav-title %}
+<h1>{% translate "2nd Factor Verified" %}</h1>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <h3>{% translate "Your 2nd Factor has been verified." %}</h3>
+  <h3>{% translate "You may now continue in your application." %}</h3>
+</div>
+{% endblock %}

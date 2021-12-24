@@ -107,18 +107,22 @@ class MFARequest(models.Model):
   @property
   def token(self):
     encoded_jwt = jwt.encode(
-      {"slug": self.slug},
+      {
+        "slug": self.slug,
+        "exp": timezone.now() + datetime.timedelta(minutes=mfa_settings.MFA_TOKEN_EXPIRE)
+      },
       settings.SECRET_KEY,
       algorithm="HS256"
     )
     return encoded_jwt
 
-  def generate(self, user):
+  @classmethod
+  def generate(cls, user):
     haikunator = Haikunator()
 
     while 1:
       slug = haikunator.haikunate(token_length=5)
-      request = MFARequest(slug=slug, owner=user)
+      request = cls(slug=slug, owner=user)
 
       try:
         request.save()
@@ -128,3 +132,11 @@ class MFARequest(models.Model):
 
       else:
         return request
+
+  @classmethod
+  def get_from_token(cls, token, owner=None):
+    data = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+    if owner:
+      return cls.objects.get(slug=data['slug'], completed=False, owner=owner)
+
+    return cls.objects.get(slug=data['slug'], completed=False)

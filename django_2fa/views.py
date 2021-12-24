@@ -2,6 +2,7 @@ import time
 
 from django import http
 from django.conf import settings
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
@@ -12,7 +13,7 @@ import pyotp
 
 from django_2fa.decorators import mfa_login_required
 from django_2fa.forms import MFAForm, AddDeviceForm
-from django_2fa.models import Device
+from django_2fa.models import Device, MFARequest
 import django_2fa.settings as mfa_settings
 
 
@@ -165,3 +166,40 @@ def device_remove(request, device=None, response_type="html"):
     return http.JsonResponse({"status": "deleted"})
 
   return http.HttpResponseRedirect(goto)
+
+
+def mfa_request(request, token):
+  try:
+    mrequest = MFARequest.get_from_token(token)
+
+  except:
+    raise http.Http404
+
+  if request.user.is_authenticated and request.user.id == mrequest.owner.id:
+    del request.session['2fa_verfied']
+
+  else:
+    login(request, mrequest.owner)
+    request.session['2fa_logout'] = True
+
+  goto = reverse('django_2fa:mfa-request-complete', args=[token])
+  return http.HttpResponseRedirect(goto)
+
+
+@mfa_login_required
+def mfa_request_complete(request, token):
+  try:
+    mrequest = MFARequest.get_from_token(token, request.user)
+
+  except:
+    raise http.Http404
+
+  mrequest.completed = True
+  mrequest.save()
+
+  if request.session.get('2fa_logout'):
+    del request.session['2fa_logout']
+    logout(request)
+
+  context = {}
+  return TemplateResponse(request, '2fa/request-completed.html', context)

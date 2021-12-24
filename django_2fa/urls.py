@@ -11,6 +11,10 @@ urlpatterns = [
   path('test/', mfa_views.test_2fa, name='test'),
   path('login/verify/<str:device>/', mfa_views.login_2fa_verify, name='verify'),
   path('login/', mfa_views.login_2fa, name='login'),
+
+  path('request/<str:token>/', mfa_views.mfa_request, name='mfa-request'),
+  path('request-complete/<str:token>/', mfa_views.mfa_request_complete, name='mfa-request-complete'),
+
   path('devices/', mfa_views.devices_list, name='devices'),
   path('devices/json', mfa_views.devices_list, name='devices-json', kwargs={'response_type': 'json'}),
 

@@ -4,7 +4,7 @@ two factor authentication support for Django
 
 ## Features
 
-- two factor auth can be enabled by default if e-mail is available for a user
 - HOTP via e-mail
 - TOTP via authernicator apps
 - FIDO via hardware tokens
+- Mechanism for using 2FA with CLI applications
