@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from django_2fa.models import Device
+from django_2fa.models import Device, MFARequest
 
 
 @admin.register(Device)
@@ -13,3 +13,12 @@ class DeviceAdmin(admin.ModelAdmin):
   raw_id_fields = ('owner',)
 
   fields = ('name', 'device_type', 'counter', 'counter_expire', 'setup_complete', 'owner')
+
+
+@admin.register(MFARequest)
+class MFARequestAdmin(admin.ModelAdmin):
+  list_display = ('slug', 'completed', 'owner', 'created')
+  list_filter = ('completed',)
+  date_hierarchy = 'created'
+  search_fields = ('slug',)
+  raw_id_fields = ('owner',)

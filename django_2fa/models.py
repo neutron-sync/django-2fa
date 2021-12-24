@@ -6,8 +6,10 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils import timezone
 
+import jwt
 import pyotp
 from encrypted_fields.fields import EncryptedTextField
+from haikunator import Haikunator
 
 import django_2fa.settings as mfa_settings
 
@@ -89,3 +91,40 @@ class Device(models.Model):
       html_message=html_message,
       fail_silently=False,
     )
+
+
+class MFARequest(models.Model):
+  slug = models.SlugField(max_length=75)
+  owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+  completed = models.BooleanField(default=False)
+
+  created = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+    return self.slug
+
+
+  @property
+  def token(self):
+    encoded_jwt = jwt.encode(
+      {"slug": self.slug},
+      settings.SECRET_KEY,
+      algorithm="HS256"
+    )
+    return encoded_jwt
+
+  def generate(self, user):
+    haikunator = Haikunator()
+
+    while 1:
+      slug = haikunator.haikunate(token_length=5)
+      request = MFARequest(slug=slug, owner=user)
+
+      try:
+        request.save()
+
+      except:
+        continue
+
+      else:
+        return request

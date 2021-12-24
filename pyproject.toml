@@ -7,7 +7,10 @@ authors = [
 dependencies = [
     "django-fernet-encrypted-fields~=0.0",
     "pyotp~=2.6",
-    "fido2~=0.9"]
+    "fido2~=0.9",
+    "haikunator>=2.1.0",
+    "pyjwt>=2.3.0",
+]
 requires-python = ">=3.7"
 dynamic = ["version"]
 license = {text = "MIT"}

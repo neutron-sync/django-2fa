@@ -37,6 +37,14 @@ def request_passes_test(auth_test_func, mfa_test_func, login_url=None, mfa_url=N
   return decorator
 
 
+def is_mfa_user(user):
+  devices = Device.objects.filter(owner=user, setup_complete=True).count()
+  if devices > 0:
+    return True
+
+  return False
+
+
 def is_mfa_authed(request):
   user_id = request.session.get('2fa_verfied')
   if user_id and request.user.id:
@@ -49,14 +57,41 @@ def is_mfa_authed(request):
   return False
 
 
+def is_mfa_authed_if_user(request):
+  if request.user.is_authenticated:
+    return is_mfa_authed(request)
+
+  return True
+
+
 def is_authed(user):
   return user.is_authenticated
+
+
+def is_authed_dont_care(user):
+  return True
 
 
 def mfa_login_required(function=None, redirect_field_name=mfa_settings.MFA_REDIRECT_FIELD, login_url=None, mfa_url=None):
   actual_decorator = request_passes_test(
     is_authed,
     is_mfa_authed,
+    login_url=login_url,
+    mfa_url=mfa_url,
+    redirect_field_name=redirect_field_name
+  )
+
+  if function:
+    return actual_decorator(function)
+
+  return actual_decorator
+
+
+
+def mfa_user_if_authed(function=None, redirect_field_name=mfa_settings.MFA_REDIRECT_FIELD, login_url=None, mfa_url=None):
+  actual_decorator = request_passes_test(
+    is_authed_dont_care,
+    is_mfa_authed_if_user,
     login_url=login_url,
     mfa_url=mfa_url,
     redirect_field_name=redirect_field_name
