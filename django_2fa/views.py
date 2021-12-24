@@ -176,7 +176,11 @@ def mfa_request(request, token):
     raise http.Http404
 
   if request.user.is_authenticated and request.user.id == mrequest.owner.id:
-    del request.session['2fa_verfied']
+    try:
+      del request.session['2fa_verfied']
+
+    except KeyError:
+      pass
 
   else:
     login(request, mrequest.owner)
