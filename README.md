@@ -20,4 +20,8 @@ There are other good Django 2nd factor authentication libraries out there, howev
 
 You will need to configure django-2fa to use it in your Django project. Django-2fa works out of the box with minimal configuration, however, you will most likely want to do more configuration such as overriding the HTML templates or using the provided API so that it fits into the style of your project.
 
-**See our [configuration docs]() for more detailed information on the process.**
+**See our [configuration docs](https://github.com/neutron-sync/django-2fa/blob/main/docs/config.md) for more detailed information on the process.**
+
+## Shameless Plugs
+
+I built this library originally for the [NeutronSync Service](https://www.neutronsync.com/). So if you would like to support this project please support the service with a subscription or a [donation](https://github.com/sponsors/neutron-sync) to the open source libraries.
