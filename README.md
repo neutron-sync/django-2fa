@@ -24,4 +24,4 @@ You will need to configure django-2fa to use it in your Django project. Django-2
 
 ## Shameless Plugs
 
-I built this library originally for the [NeutronSync Service](https://www.neutronsync.com/). So if you would like to support this project please support the service with a subscription to NeutronSync or a [donation](https://github.com/sponsors/neutron-sync) to the open source libraries.
+I built this library originally for the [NeutronSync Service](https://www.neutronsync.com/). So if you would like to support this project please support the service with a subscription to NeutronSync or a [donation](https://github.com/sponsors/neutron-sync) to the open source libraries. Django 2FA is included by default in the Neutron Sync Server project.
