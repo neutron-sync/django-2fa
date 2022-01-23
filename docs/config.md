@@ -2,7 +2,7 @@
 
 ## Environmental Variables - *Required*
 
-`SALT_KEY`: Set a to a random string for encrypting secret database fields. 36 character string recommended.
+`SALT_KEY`: Set to a random string for encrypting secret database fields. 36 character string recommended.
 
 ## settings.py - *Required*
 
