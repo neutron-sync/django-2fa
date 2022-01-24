@@ -66,6 +66,6 @@ You will want to copy all the templates listed in `django_2fa/templates/2fa/`. S
 | `verify-fido.html` | Page for verifying FIDO devices. |
 | `verify.html` | Page for verifying e-mail and authenticator app. Also used as the second form in the device addition process. |
 
-## Customize Workflow Using the API
+## Custom Workflow Using the API
 
 You can also build a complete customized workflow using the included API. See the [API Docs](api.md) for more information about using the API.
