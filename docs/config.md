@@ -46,3 +46,22 @@ urlpatterns = [
 | `MFA_ICON` | `"https://github.com/neutron-sync/django-2fa/raw/main/django_2fa/static/2fa/2fa-icon.png"` | Icon show in 2 factor auth apps. |
 | `MFA_FIDO_KEY_NAME` | `f"{HOST} 2FA"` | Host name stored in FIDO key. |
 | `MFA_TOKEN_EXPIRE` | `15` | Expiration in minutes for how long an e-mail token will last. |
+
+## Template Customization
+
+Django 2FA comes with a set of views and templates out of the box that handle second factor authentication. The templates are based on [Materialize](https://materializecss.com/); however, they probably do not match your site style. The easiest way to customize the templates is to copy the templates to a Django app that comes before `django_2fa` in your `INSTALLED_APPS` list. Then you can customize the CSS colors or go further and customize the whole look and feel.
+
+You will want to copy all the templates listed in `django_2fa/templates/2fa/`. See [Github](https://github.com/neutron-sync/django-2fa/tree/main/django_2fa/templates/2fa) to view and download all the templates. Below is a description of what each template is used for.
+
+| Template | Description |
+| -------- | ----------- |
+| `add-device.html` | Initial form for adding a 2 factor device. |
+| `base.html` | Base template for 2fa app templates. |
+| `complete-fido.html` | second form used to complete the FIDO hardware device addition process. |
+| `devices.html` | List of a users personal 2FA devices. |
+| `email-code.html` | HTML e-mail sent with e-mail 2 factor requests. |
+| `email-code.txt` | Plain text e-mail sent with e-mail 2 factor requests. |
+| `login.html` | Initial page shown for 2 factor protected views. Lets the user choose with device to use for their second factor. |
+| `request-completed.html` | When verifying a user for external applications like for a CLI application, this is the final success page. |
+| `verify-fido.html` | Page for verifying FIDO devices. |
+| `verify.html` | Page for verifying e-mail and authenticator app. Also used as the second form in the device addition process. |
