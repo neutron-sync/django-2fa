@@ -15,6 +15,15 @@ INSTALLED_APPS = [
 ]
 ```
 
+Add `'django_2fa.middleware.MFAProctectMiddleware'` to your list of middleware after session and authentication middleware.
+
+```python
+MIDDLEWARE = [
+  ...
+  'django_2fa.middleware.MFAProctectMiddleware',
+]
+```
+
 ## urls.py - *Required*
 
 Add django_2fa URLs
