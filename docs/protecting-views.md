@@ -2,7 +2,7 @@
 
 When a user is authenticated and a second factor has been verified, the key `'2fa_verfied'` contains the value of `True` on the session. Many views you will want to protect with a second factor. This document outlines the ways you can protect views to enforce a second factor.
 
-Note: a user will bypass second factor checks if they do not have a second factor device available and the setup process is complete.
+**Note:** a user will bypass second factor checks if they do not have a second factor device available and the setup process is complete.
 
 ## 2FA Enforcement via View Decorator
 
@@ -35,3 +35,7 @@ Example: `['/admin/', '/account/']`
 A list of exact URL paths that when matched exactly, 2FA will be enforced.
 
 Example: `['/account/change-password/', '/account/buy-expensive-stuff/']`
+
+## Ensuring Everyone Always Has a Second Factor
+
+Right now this isn't built into the library, however, if you enforce all users always having an e-mail address, then you can automatically add an e-mail authentication device for them. Note, you will want to make sure their e-mail is also verified and working.
