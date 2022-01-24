@@ -32,7 +32,7 @@ Example: `['/admin/', '/account/']`
 
 ### MFA_PROTECT_PATH_EXACT
 
-A list of exact URL paths that when matched exactly, 2FA will be enforced.
+A list of URL paths that when matched exactly, 2FA will be enforced.
 
 Example: `['/account/change-password/', '/account/buy-expensive-stuff/']`
 
