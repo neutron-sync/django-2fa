@@ -47,7 +47,7 @@ urlpatterns = [
 | `MFA_FIDO_KEY_NAME` | `f"{HOST} 2FA"` | Host name stored in FIDO key. |
 | `MFA_TOKEN_EXPIRE` | `15` | Expiration in minutes for how long an e-mail token will last. |
 
-## Template Customization
+## Template Customization - *Optional*
 
 Django 2FA comes with a set of views and templates out of the box that handle second factor authentication. The templates are based on [Materialize](https://materializecss.com/); however, they probably do not match your site style. The easiest way to customize the templates is to copy the templates to a Django app that comes before `django_2fa` in your `INSTALLED_APPS` list. Then you can customize the CSS colors or go further and customize the whole look and feel.
 
@@ -65,3 +65,7 @@ You will want to copy all the templates listed in `django_2fa/templates/2fa/`. S
 | `request-completed.html` | When verifying a user for external applications like for a CLI application, this is the final success page. |
 | `verify-fido.html` | Page for verifying FIDO devices. |
 | `verify.html` | Page for verifying e-mail and authenticator app. Also used as the second form in the device addition process. |
+
+## Customize Workflow Using the API
+
+You can also build a complete customized workflow using the included API. See the [API Docs](api.md) for more information about using the API.
