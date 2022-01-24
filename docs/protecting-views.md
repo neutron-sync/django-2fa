@@ -1,4 +1,4 @@
-# Protecting View with a 2nd Factor
+# Protecting Views with a 2nd Factor
 
 When a user is authenticated and a second factor has been verified, the key `'2fa_verfied'` contains the value of `True` on the session. Many views you will want to protect with a second factor. This document outlines the ways you can protect views to enforce a second factor.
 
