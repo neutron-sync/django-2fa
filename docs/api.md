@@ -178,7 +178,7 @@ This set of endpoints are used to complete the FIDO setup process. The FIDO setu
 
 ## External App 2 Factor Auth
 
-Request 2nd factor process completetion. See [external apps](external-apps.md) for more information about using 2nd factor auth with external applications.
+Request 2nd factor process completetion. See [external apps docs](external-apps.md) for more information about using 2nd factor auth with external applications.
 
 ### GET /2fa/request-use/<token>/
 
