@@ -26,6 +26,7 @@ You will need to configure django-2fa to use it in your Django project. Django-2
 
 - [API Details](https://github.com/neutron-sync/django-2fa/blob/main/docs/api.md)
 - [Protecting Views with a 2nd Factor](https://github.com/neutron-sync/django-2fa/blob/main/docs/protecting-views.md)
+- [2 Factor Auth with External Apps](https://github.com/neutron-sync/django-2fa/blob/main/docs/external-apps.md)
 
 ## Shameless Plugs
 
