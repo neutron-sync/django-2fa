@@ -1,6 +1,7 @@
 import base64
 
 from django.conf import settings
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django import http
 from django.shortcuts import get_object_or_404
@@ -12,6 +13,7 @@ from fido2.ctap2 import AttestationObject, AuthenticatorData, AttestedCredential
 from fido2.server import Fido2Server
 from fido2.webauthn import PublicKeyCredentialRpEntity
 
+from django_2fa.decorators import is_mfa_user
 from django_2fa.models import Device, MFARequest
 
 import django_2fa.settings as mfa_settings
@@ -126,3 +128,33 @@ def request_use(request, token):
   mrequest.save()
 
   return http.JsonResponse({'status': "OK"})
+
+
+@csrf_exempt
+def ext_login(request):
+  username = request.POST.get('username', None)
+  password = request.POST.get('password', None)
+
+  if not username:
+    return http.HttpResponseBadRequest("Username is required.", content_type="text/plain")
+
+  if not password:
+    return http.HttpResponseBadRequest("Password is required.", content_type="text/plain")
+
+  user = authenticate(request, username=username, password=password)
+  if not user:
+    return http.HttpResponseBadRequest("Authentication failed.", content_type="text/plain")
+
+  login(request, user)
+
+  mfa_url = None
+  if is_mfa_user(user):
+    mfa_request = MFARequest.generate(user)
+    token = mfa_request.token
+    mfa_url = reverse('django_2fa:mfa-request', args=[token])
+    mfa_url = "{}://{}{}".format(request.scheme, request.get_host(), mfa_url)
+
+  return http.JsonResponse({
+    'user': user.id,
+    'mfa_url': mfa_url,
+  })
