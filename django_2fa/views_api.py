@@ -149,6 +149,7 @@ def ext_login(request):
   login(request, user)
 
   mfa_url = None
+  token = None
   if is_mfa_user(user):
     mfa_request = MFARequest.generate(user)
     token = mfa_request.token
@@ -158,4 +159,5 @@ def ext_login(request):
   return http.JsonResponse({
     'user': user.id,
     'mfa_url': mfa_url,
+    'token': token,
   })

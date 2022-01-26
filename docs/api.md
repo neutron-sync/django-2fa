@@ -180,6 +180,26 @@ This set of endpoints are used to complete the FIDO setup process. The FIDO setu
 
 Request 2nd factor process completetion. See [external apps docs](external-apps.md) for more information about using 2nd factor auth with external applications.
 
+### POST /2fa/login/external/json
+
+Login endpoint that can be used to start an authenticated session and also returns the MFA URL if required for that user.
+
+**Body Parameters:**
+
+- `username`: username to authenticate.
+- `password`: password of given user.
+
+**Example Response:**
+
+```json
+{
+  "user": 1,
+  "token": "BLAHeXAiOiJKV1QiLCJhbGciOiJIUzI1BLAH.eyJzbHVnIjoibBLAHWZyb2ctBLAHMTYiLCJleHAiOjE2NDMyMjk3BLAH.BLAH5lYFazBLAHKzBLAHyuOSVTX1l3iSbXQMlQlBLAH",
+  "mfa_url": "http://localhost:8000/2fa/request/BLAHeXAiOiJKV1QiLCJhbGciOiJIUzI1BLAH.eyJzbHVnIjoibBLAHWZyb2ctBLAHMTYiLCJleHAiOjE2NDMyMjk3BLAH.BLAH5lYFazBLAHKzBLAHyuOSVTX1l3iSbXQMlQlBLAH/"
+}
+```
+
+
 ### GET /2fa/request-use/<token>/
 
 **Query Parameters:** *None*

@@ -4,7 +4,7 @@ If you are building an external application that uses your Django app as an API,
 
 ## Step 1: Login and Obtain MFA Token URL
 
-*coming soon*
+The external app should login the user with the `/2fa/login/external/json` endpoint. This endpoint will authenicate the user and start their session and additionally return the MFA URL if it is required for that user.
 
 ## Step 2: User Visits Token URL
 
