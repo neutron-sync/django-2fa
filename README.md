@@ -4,7 +4,7 @@ two factor authentication support for Django
 
 ## Motivation
 
-There are other good Django 2nd factor authentication libraries out there, however, the some libraries do not support e-mail and FIDO hardware keys as a second factor by default and others aren't really architected that well for different levels of integration. Thus, django-2fa supports FIDO and E-Mail by default and comes with several ways to integrate it such as built in views with templates to override, API integration, and a decorator to add to your existing views.
+There are other good Django 2nd factor authentication libraries out there, however, some libraries do not support e-mail and FIDO hardware keys as a second factor by default and others aren't really architected that well for different levels of integration. Thus, django-2fa supports FIDO and E-Mail by default and comes with several ways to integrate it such as built in views with templates to override, API integration, and a decorator to add to your existing views.
 
 ## Supported 2nd Factors
 
