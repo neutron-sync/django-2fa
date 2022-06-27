@@ -78,3 +78,7 @@ You will want to copy all the templates listed in `django_2fa/templates/2fa/`. S
 ## Custom Workflow Using the API
 
 You can also build a complete customized workflow using the included API. See the [API Docs](api.md) for more information about using the API.
+
+## Getting started
+
+To get started you should take a look at the `2fa/devices/` endpoint. You will see a page with a list of all devices and the button to add a new device. From there you can follow the auth flow and make adjustments to the templates as needed.
